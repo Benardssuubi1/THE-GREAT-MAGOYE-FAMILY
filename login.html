@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Magoye Family Login</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  :root {
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --ink: #1a1612;
+    --gold: #b8975a;
+    --gold2: #d4af72;
+    --muted: #8a7968;
+    --border: #e8e2d9;
+    --forest: #2d4a3e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('assets/hero-bg.jpg') center/cover no-repeat;
+    filter: saturate(0.88) brightness(0.65);
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(26,22,18,0.20), rgba(26,22,18,0.60));
+    z-index: -1;
+  }
+
+  nav {
+    position: fixed;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: rgba(250,248,244,0.92);
+    backdrop-filter: blur(14px);
+    z-index: 10;
+  }
+
+  .nav-logo { display:flex; align-items:center; gap:12px; }
+  .nav-logo-img { width:40px; height:40px; border-radius:50%; object-fit:cover; border:1px solid rgba(26,22,18,0.12); }
+  .nav-logo-text { font-family:'Cormorant Garamond',serif; color: var(--ink); letter-spacing:0.08em; text-transform:uppercase; font-size:16px; }
+  .nav-links { display:flex; gap:28px; list-style:none; padding:0; margin:0; }
+  .nav-links a { color: var(--muted); text-decoration:none; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-toggle { display:none; background:none; border:none; cursor:pointer; }
+  .nav-toggle span { display:block; width:22px; height:1.5px; background: var(--ink); margin:5px 0; }
+
+  .page-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 120px 24px 72px;
+  }
+
+  .auth-card {
+    width: min(780px, 100%);
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.26);
+    border-radius: 28px;
+    box-shadow: 0 30px 90px rgba(0,0,0,0.26);
+    backdrop-filter: blur(22px);
+    padding: 42px;
+    color: white;
+  }
+
+  .auth-welcome { max-width: 540px; margin-bottom: 36px; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 14px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size: clamp(34px, 5vw, 52px); font-weight: 300; margin-bottom: 16px; }
+  .section-title em { font-style: italic; color: var(--gold2); }
+  .section-lead { font-size: 14px; color: rgba(255,255,255,0.9); max-width: 520px; line-height: 1.85; }
+
+  .auth-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+  .auth-tab {
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.08);
+    color: white;
+    padding: 18px 22px;
+    border-radius: 18px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    transition: background 0.25s, border-color 0.25s, color 0.25s;
+  }
+  .auth-tab.active { background: rgba(255,255,255,0.85); color: var(--ink); border-color: rgba(255,255,255,0.65); }
+
+  .auth-form { display: grid; gap: 18px; }
+  .form-group { display:flex; flex-direction:column; gap:8px; }
+  .form-label { font-size: 12px; letter-spacing:0.12em; text-transform:uppercase; color: rgba(255,255,255,0.75); }
+  .form-input {
+    width:100%;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    color:white;
+    padding: 16px 18px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .form-input:focus { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.16); }
+  .form-input::placeholder { color: rgba(255,255,255,0.55); }
+
+  .auth-actions { display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+  .auth-actions p { margin:0; color: rgba(255,255,255,0.7); font-size:13px; }
+
+  .btn { display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; cursor:pointer; border:none; text-decoration:none; transition: all 0.25s; }
+  .btn-dark { background: var(--ink); color: var(--cream); padding: 16px 30px; }
+  .btn-dark:hover { background: var(--forest); }
+  .btn-gold { background: var(--gold); color: var(--ink); padding: 16px 30px; }
+  .btn-gold:hover { background: var(--gold2); }
+  .btn-outline { border:1px solid var(--gold); color: var(--gold); padding: 14px 28px; background: transparent; }
+  .btn-outline:hover { background: var(--gold); color: var(--ink); }
+
+  .footer {
+    margin-top: 40px;
+    text-align:center;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(26,22,18,0.95);
+    color: white;
+    padding: 16px 22px;
+    border-left: 4px solid var(--gold);
+    border-radius: 14px;
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    z-index: 20;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { border-left-color: #d35400; }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display:none; }
+    .nav-toggle { display:block; }
+    .page-shell { padding-top: 100px; }
+    .auth-card { padding: 32px 26px; }
+    .auth-tabs { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .auth-card { border-radius: 22px; }
+    .auth-actions { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="nav-logo-img" src="assets/hero-bg.jpg" alt="Magoye family logo">
+    <span class="nav-logo-text">Magoye</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="legacy-fund.html">Legacy Fund</a></li>
+    <li><a href="media.html">Media Hub</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="family-tree.html">Family Tree</a></li>
+    <li><a href="updates.html">Updates</a></li>
+    <li><a href="chat.html">Chat</a></li>
+    <li><a href="admin.html">Admin</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main class="page-shell">
+  <div class="auth-card" role="region" aria-labelledby="auth-title">
+    <div class="auth-welcome">
+      <p class="section-eyebrow">Family Access</p>
+      <h1 id="auth-title" class="section-title">Secure Sign In or Join the Magoye Circle</h1>
+      <p class="section-lead">Use your family credentials to access heritage stories, contribute to funds, and keep our archive protected.</p>
+    </div>
+
+    <div class="auth-tabs" role="tablist" aria-label="Authentication modes">
+      <button class="auth-tab active" type="button" data-mode="signin" role="tab" aria-selected="true">Sign In</button>
+      <button class="auth-tab" type="button" data-mode="register" role="tab" aria-selected="false">Create Account</button>
+    </div>
+
+    <form id="auth-form" class="auth-form" novalidate>
+      <input type="hidden" id="auth-mode" name="mode" value="signin">
+
+      <div class="form-group form-fullname" hidden>
+        <label class="form-label" for="full-name">Full Name</label>
+        <input class="form-input" id="full-name" name="fullName" type="text" placeholder="eg. Jessica Magoye" autocomplete="name">
+      </div>
+
+      <div class="form-group form-branch" hidden>
+        <label class="form-label" for="family-branch">Family Branch / Lineage</label>
+        <input class="form-input" id="family-branch" name="branch" type="text" placeholder="eg. Kitalimusango branch" autocomplete="organization">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input class="form-input" id="email" name="email" type="email" placeholder="email@magoye.example" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn btn-gold" type="submit" id="auth-submit">Sign In</button>
+        <p id="auth-helper">New family member? Create an account to join the archive.</p>
+      </div>
+    </form>
+
+    <p class="footer" style="margin-top:28px;">This page is protected by the Magoye API and family-only access controls.</p>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // If your Magoye API is hosted separately, set the full URL here.
+  // Example: https://api.magoye-family.example
+  window.MAGOYE_API_BASE = '/api';
+  window.MAGOYE_API_KEY = ''; // Add your family API key here if desired for page-level requests
+</script>
+<script src="javascript/api.js" defer></script>
+<script defer>
+  const tabs = document.querySelectorAll('.auth-tab');
+  const authMode = document.getElementById('auth-mode');
+  const fullNameGroup = document.querySelector('.form-fullname');
+  const branchGroup = document.querySelector('.form-branch');
+  const submitButton = document.getElementById('auth-submit');
+  const authHelper = document.getElementById('auth-helper');
+  const authForm = document.getElementById('auth-form');
+
+  function setMode(mode) {
+    tabs.forEach(tab => {
+      const active = tab.dataset.mode === mode;
+      tab.classList.toggle('active', active);
+      tab.setAttribute('aria-selected', active);
+    });
+    authMode.value = mode;
+    const isRegister = mode === 'register';
+    fullNameGroup.hidden = !isRegister;
+    branchGroup.hidden = !isRegister;
+    submitButton.textContent = isRegister ? 'Create Account' : 'Sign In';
+    authHelper.textContent = isRegister
+      ? 'Register using your full family details and lineage.'
+      : 'Enter your email and password to continue.';
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => setMode(tab.dataset.mode));
+  });
+
+  function toast(message, type = '') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast${type ? ' ' + type : ''}`;
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  authForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const mode = authMode.value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const data = { email, password };
+
+    if (!email || !password) {
+      toast('Please complete your email and password.', 'error');
+      return;
+    }
+
+    if (mode === 'register') {
+      const fullName = document.getElementById('full-name').value.trim();
+      const branch = document.getElementById('family-branch').value.trim();
+      if (!fullName || !branch) {
+        toast('Please add your full name and family branch.', 'error');
+        return;
+      }
+      data.fullName = fullName;
+      data.branch = branch;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = mode === 'register' ? 'Creating...' : 'Signing in...';
+
+    try {
+      const endpoint = mode === 'register' ? '/auth/register' : '/auth/login';
+      await window.MagoyeApi.post(endpoint, data);
+      toast(mode === 'register' ? 'Account created. Welcome to Magoye!' : 'Signed in successfully.');
+      authForm.reset();
+      setMode('signin');
+    } catch (error) {
+      toast(error.message || 'Unable to reach Magoye API.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = mode === 'register' ? 'Create Account' : 'Sign In';
+    }
+  });
+</script>
+</body>
+</html>
